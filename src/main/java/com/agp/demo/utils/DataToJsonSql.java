@@ -15,6 +15,14 @@ public class DataToJsonSql {
                 .forEach(item->rstMap.put(item,item));
         return JSON.toJSONString(rstMap);
     }
+    public static void getJson(String dataOutputs){
+        System.out.println("JSON出参映射：");
+        System.out.println(toJson(dataOutputs));
+    }
+    public static void getSql(String dataOutputs,String table,String conditionFields,String conditions){
+        System.out.println("Cql语句：");
+        System.out.println(toSql(dataOutputs,table,conditionFields,conditions));
+    }
 
     public static String toSql(String dataOutputs,String table,String conditionFields,String conditions){
         String[] split = dataOutputs.split("\n");
@@ -59,6 +67,29 @@ public class DataToJsonSql {
         return map;
     }
 
+    public static Map<String,Object> toIntMapWithInputFields(String dataOutputs,String inputFields,String inputValues){
+        Map<String, Integer> stringIntegerMap = toIntMap(dataOutputs);
+        Map<String,Object> rstMap=new HashMap<>();
+        rstMap.putAll(stringIntegerMap);
+        String[] split = inputFields.split(",");
+        String[] splitValue = inputValues.split(",");
+        if (split.length!=splitValue.length) throw new RuntimeException("参数和值不匹配");
+        for (int i=0;i<split.length;i++){
+            rstMap.put(split[i],splitValue[i]);
+        }
+        return rstMap;
+    }
+
+    public static void getInsertDataJSON(String dataOutputs,String inputFields,String inputValues){
+        Map<String, Object> stringObjectMap = toIntMapWithInputFields(dataOutputs, inputFields, inputValues);
+        System.out.println("Cql插入数据语句：");
+        System.out.println("'"+JSON.toJSONString(stringObjectMap)+"'");
+    }
+    public static void getOutputs(String dataRawOutputs){
+        System.out.println("出参列表：");
+        System.out.println(listOutputs(dataRawOutputs));
+    }
+
     public static String listOutputs(String dataRawOutputs){
         String[] split = dataRawOutputs.split("\n");
         StringBuilder sb=new StringBuilder();
@@ -88,6 +119,21 @@ public class DataToJsonSql {
         }
         return conditionMarks;
     }
+
+    public static void getInputList(String inputs){
+        System.out.println("入参列表：");
+        System.out.println(inputs);
+    }
+
+    public static void getInputsJson(String inputs){
+        System.out.println("JSON入参列表：");
+        Map<String,String> rst=new HashMap<>();
+        Arrays.asList(inputs.split(",")).stream()
+                .forEach(item->rst.put(item,item));
+        System.out.println(JSON.toJSONString(rst));
+    }
+
+
     @Test
     public void testInvete(){
         String str="        \"lst_1day_1to3hour_invite_cut_cnt\":0,\n" +
@@ -156,6 +202,57 @@ public class DataToJsonSql {
         Map<String, Integer> map = toIntMap(str);
         map.putAll(toIntMap(str2));
         System.out.println(JSON.toJSONString(map));
+    }
+    @Test
+    public void testSameCustomerInvite(){
+        String str="        \"lst_1day_mobile_device_cut_cnt\":0,\n" +
+                "        \"lst_7day_mobile_device_cut_cnt\":0,\n" +
+                "        \"lst_30day_mobile_device_cut_cnt\":0,\n" +
+                "        \"lst_180day_mobile_device_cut_cnt\":0";
+        getJson(str);
+        getInsertDataJSON(str,"mobile,device_id","454545,7878");
+        getSql(str,"fk_sc_kanjia_mobile_device_stat","mobile,device_id","mobile,udid");
+        getOutputs(str);
+        getInputList("mobile,udid");
+        getInputsJson("mobile,udid");
+    }
+
+    @Test
+    public void testSameCertIdSameDeviceIdInvite(){
+        String str="        \"lst_1day_cert_device_cut_cnt\":0,\n" +
+                "        \"lst_7day_cert_device_cut_cnt\":0,\n" +
+                "        \"lst_30day_cert_device_cut_cnt\":0,\n" +
+                "        \"lst_180day_cert_device_cut_cnt\":0";
+        getJson(str);
+        getInsertDataJSON(str,"cert_id,device_id","52134912365121101,454545");
+        getSql(str,"fk_sc_kanjia_cert_device_stat","cert_id,device_id","cardNo,udid");
+        getOutputs(str);
+        getInputList("cardNo,udid");
+        getInputsJson("cardNo,udid");
+    }
+
+    @Test
+    public void testSameActivityRiskNumber(){
+        String str="        \"task_cut_member_risk_level_high_cnt\":2,\n" +
+                "        \"task_cut_member_risk_level_middle_cnt\":5,\n" +
+                "        \"task_cut_member_risk_level_low_cnt\":4";
+        getJson(str);
+        getInsertDataJSON(str,"launch_task_id","454545");
+        getSql(str,"fk_sc_kanjia_risk_level","launch_task_id","task_number");
+        getOutputs(str);
+        getInputList("task_number");
+        getInputsJson("task_number");
+    }
+
+    @Test
+    public void testSameDeviceLogonDifferentAccounts(){
+        String str=" \"device_diff_login_cut_cnt\": 2";
+        getJson(str);
+        getInsertDataJSON(str,"device_id","454545");
+        getSql(str,"fk_sc_kanjia_login_diff_member","device_id","udid");
+        getOutputs(str);
+        getInputList("udid");
+        getInputsJson("udid");
     }
 
     public static void main(String[] args) {
