@@ -1,5 +1,6 @@
 package com.agp.demo.leetcode.sort.pairreverse;
 
+import com.agp.demo.annotation.WrongInvoke;
 import org.junit.Test;
 import org.springframework.util.CollectionUtils;
 
@@ -73,12 +74,25 @@ public class PairReverseWithNode {
        second.next=first;  //second.next 在等号右边代表指针。  //不能放到上面， 会导致 second.next =first  ;first.next=pairSwap(first);
        return second;
    }
+    @WrongInvoke("//死循环 tmpSecond.next == second.next==first 。并没有给second赋值，没有覆盖second。 ")
+   public static Node pairSwap2(Node node){
+       if (node==null || node.next==null) return node;
+       Node first=node;
+       Node second=node.next;
+       Node tmpSecond=second;
+       second.next=first;
+       first.next=pairSwap2(tmpSecond.next);  //死循环 tmpSecond.next == second.next==first
+       return second;
+   }
 
    @Test
     public void test(){
        Node node = new Node().getNode(Arrays.asList(1, 2, 3, 4, 5, 6,7));
-       Node node1 = pairSwap(node);
-       System.out.println(node1);
+       System.out.println(node);
+//       Node node1 = pairSwap(node);
+       Node node2 = pairSwap2(node);
+//       System.out.println(node1);
+       System.out.println(node2);
    }
 
 }
