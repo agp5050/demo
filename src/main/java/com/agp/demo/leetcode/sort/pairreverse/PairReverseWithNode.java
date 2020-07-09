@@ -89,10 +89,10 @@ public class PairReverseWithNode {
     public void test(){
        Node node = new Node().getNode(Arrays.asList(1, 2, 3, 4, 5, 6,7));
        System.out.println(node);
-//       Node node1 = pairSwap(node);
-       Node node2 = pairSwap2(node);
-//       System.out.println(node1);
-       System.out.println(node2);
+       Node node1 = pairSwap(node);
+//       Node node2 = pairSwap2(node);
+       System.out.println(node1);
+//       System.out.println(node2);
    }
 
 }
