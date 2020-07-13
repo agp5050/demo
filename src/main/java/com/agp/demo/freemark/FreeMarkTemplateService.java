@@ -38,9 +38,9 @@ public class FreeMarkTemplateService {
     @Test
     public void test() throws IOException, TemplateException {
         String templateName="1";
-        String templateContext="select count(1) as count002 from Vabc_<#if aaa = 1>1<#else>0</#if> where 1=1 <#if customerId?? && customerId!= \"\"> and CUSTOMERID = :customerId </#if>";
+        String templateContext="select count(1) as count002 from Vabc_<#if dayMod = 1>1<#else>0</#if> where 1=1 <#if customerId?? && customerId!= \"\"> and CUSTOMERID = :customerId </#if>";
         HashMap<String,Object> model=new HashMap<String,Object>();
-        model.put("aaa",0);
+        model.put("dayMod",0);
         model.put("customerId","customerIdV");
         System.out.println(parsingTemplate(templateName,templateContext,model));
     }

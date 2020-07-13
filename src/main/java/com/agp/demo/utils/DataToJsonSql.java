@@ -23,15 +23,15 @@ public class DataToJsonSql {
         System.out.println("Cql语句：");
         System.out.println(toSql(dataOutputs,table,conditionFields,conditions));
     }
+    public static void getMysql(String dataOutputs,String table,String conditionFields,String conditions){
+        System.out.println("Mysql语句：");
+        System.out.println(toMysql(dataOutputs,table,conditionFields,conditions));
+    }
+
+
 
     public static String toSql(String dataOutputs,String table,String conditionFields,String conditions){
-        String[] split = dataOutputs.split("\n");
-        StringBuilder sb=new StringBuilder("select ");
-        Arrays.asList(split).stream()
-                .map(item->item.split(":")[0].trim())
-                .map(item->item.substring(1,item.length()-1))
-                .forEach(item->sb.append(item+","));
-        sb.deleteCharAt(sb.length()-1);
+        StringBuilder sb = getStringBuilder(dataOutputs);
 
         sb
                 .append(" from ")
@@ -57,6 +57,46 @@ public class DataToJsonSql {
         return sb.toString();
 
     }
+    public static String toMysql(String dataOutputs,String table,String conditionFields,String conditions){
+        StringBuilder sb = getStringBuilder(dataOutputs);
+
+        sb
+                .append(" from ")
+                .append(table)
+                .append(" where ");
+        String[] fields = conditionFields.split(",");
+        String[] fieldMarks = conditions.split(",");
+        int lnt;
+        if ((lnt=fields.length)!=fieldMarks.length) return "";
+        for (int i=0;i<lnt;i++){
+            boolean last=(i==lnt-1);
+            String conditionMarks=fieldMarks[i];
+            conditionMarks=trimStr(conditionMarks);
+            conditionMarks=addMysqlSomething(conditionMarks);
+            String conditionField=fields[i];
+            sb.append(conditionField)
+                    .append(" = ")
+                    .append(conditionMarks);
+            if (!last) sb.append(" and ");
+
+        }
+
+        return sb.toString();
+
+    }
+
+    private static StringBuilder getStringBuilder(String dataOutputs) {
+        String[] split = dataOutputs.split("\n");
+        StringBuilder sb = new StringBuilder("select ");
+        Arrays.asList(split).stream()
+                .map(item -> item.split(":")[0].trim())
+                .map(item -> item.substring(1, item.length() - 1))
+                .forEach(item -> sb.append(item + ","));
+        sb.deleteCharAt(sb.length() - 1);
+        return sb;
+    }
+
+
     public static Map<String,Integer> toIntMap(String dataOutputs){
         String[] split = dataOutputs.split("\n");
         Map<String,Integer> map=new HashMap<>();
@@ -108,6 +148,9 @@ public class DataToJsonSql {
     }
     private static String addSomething(String conditionMarks) {
         return "#"+conditionMarks+"#";
+    }
+    private static String addMysqlSomething(String conditionMarks) {
+        return ":"+conditionMarks;
     }
 
     private static String trimStr(String conditionMarks) {
@@ -253,6 +296,50 @@ public class DataToJsonSql {
         getOutputs(str);
         getInputList("udid");
         getInputsJson("udid");
+    }
+
+    @Test
+    public void testRecentHourSameMobileSameDeviceInvite(){
+        String str="        \"lst_mobile_device_cut_cnt_30min\":0,\n" +
+                "        \"lst_mobile_device_cut_cnt_60min\":0,\n" +
+                "        \"lst_mobile_device_cut_cnt_180min\":0";
+        String inputs="udid,phone";
+        String inputsFields="device_id,phone_no";
+        getJson(str);
+        getInsertDataJSON(str,inputsFields,"4545,18611965012");
+        getMysql(str,"record_cut_price",inputsFields,inputs);
+        getOutputs(str);
+        getInputList(inputs);
+        getInputsJson(inputs);
+    }
+    @Test
+    public void testRecentHourSameCardNoSameDeviceInvite(){
+        String str="        \"lst_cert_device_cut_cnt_30min\":0,\n" +
+                "        \"lst_cert_device_cut_cnt_60min\":0,\n" +
+                "        \"lst_cert_device_cut_cnt_180min\":0";
+        String inputs="udid,cardNo";
+        String inputsFields="device_id,cert_id";
+        getJson(str);
+        getInsertDataJSON(str,inputsFields,"4545,454545");
+        getMysql(str,"record_cut_price",inputsFields,inputs);
+        getOutputs(str);
+        getInputList(inputs);
+        getInputsJson(inputs);
+    }
+
+    @Test
+    public void testSameDeviceSameCommodity(){
+        String str="        \"lst_device_goods_cut_cnt_30min\":0,\n" +
+                "        \"lst_device_goods_cut_cnt_60min\":0,\n" +
+                "        \"lst_device_goods_cut_cnt_180min\":0";
+        String inputs="udid,taskId";
+        String inputsFields="device_id,launch_id";
+        getJson(str);
+        getInsertDataJSON(str,inputsFields,"454545,4545");
+        getMysql(str,"record_cut_price",inputsFields,inputs);
+        getOutputs(str);
+        getInputList(inputs);
+        getInputsJson(inputs);
     }
 
     public static void main(String[] args) {

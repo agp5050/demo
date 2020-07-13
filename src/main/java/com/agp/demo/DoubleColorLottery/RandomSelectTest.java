@@ -9,7 +9,7 @@ public class RandomSelectTest {
     @Test
     public void testRandomSelect(){
         int[] ints = RandomSelect.randomSelect();
-        log.info("randomSelect:{}", JSONArray.toJSONString(ints));
+        log.info("randomSelect:红球:{},{},{},{},{},{}，蓝球:{}", ints[0],ints[1],ints[2],ints[3],ints[4],ints[5],ints[6]);
     }
     @Test
     public void multiTestRandomSelect(){
