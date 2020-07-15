@@ -1,5 +1,6 @@
 package com.agp.demo.freemark;
 
+import com.agp.demo.annotation.RightInvoke;
 import freemarker.cache.StringTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -43,5 +44,14 @@ public class FreeMarkTemplateService {
         model.put("dayMod",0);
         model.put("customerId","customerIdV");
         System.out.println(parsingTemplate(templateName,templateContext,model));
+    }
+    @RightInvoke("要学习Freemarker的语法才可以。将文本model和java对象组合输出为String")
+    @Test
+    public void testArray() throws IOException, TemplateException {
+        String[] split = "1,2".split(",");
+        String sql="select abc_${ary[0]} from abcT";
+        HashMap<String,Object> model=new HashMap<String,Object>();
+        model.put("ary",split);
+        System.out.println(parsingTemplate("2",sql,model));
     }
 }
