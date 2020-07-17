@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: demo
+#  datasource:
+#    url: aaa
+#    username: aasdf
+#    password:
+#    type: com.zaxxer.hikari.HikariDataSource
+#    hikari:
+#      driver-class-name:
