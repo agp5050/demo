@@ -7,7 +7,6 @@ import org.junit.Test;
 import org.postgresql.Driver;
 import org.postgresql.ds.PGSimpleDataSource;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;

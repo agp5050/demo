@@ -377,7 +377,28 @@ public class DataToJsonSql {
 //        getOutputs(outputs);
 //        getMysql();
     }
+    @Test
+    public void testCqlLstXdays(){
+        String str="\"lst_360day_refuse_cnt\":0,\n" +
+                "        \"lst_30day_refuse_cnt\":0,\n" +
+                "        \"lst_3day_refuse_cnt\":0,\n" +
+                "        \"lst_60day_refuse_cnt\":0,\n" +
+                "        \"lst_90day_refuse_cnt\":0,\n" +
+                "        \"lst_7day_refuse_cnt\":0,\n" +
+                "        \"lst_180day_refuse_cnt\":0,\n" +
+                "        \"lst_120day_refuse_cnt\":0,\n" +
+                "        \"lst_1day_refuse_cnt\":0,\n" +
+                "        \"risk_type\":\"人脸识别异常\"";
+        String inputs="cardNo";
+        String tableName="fk_flow57_refuse_certid_stat";
+        String inputsFields="cert_id";
+        getInputsJson(inputs);
+        getSql(str,tableName,inputsFields,inputs);
+        getOutputs(str);
+        getJson(str);
+        getInsertDataJSON(str,inputsFields,"123");
 
+    }
     public static void main(String[] args) {
 
     }
