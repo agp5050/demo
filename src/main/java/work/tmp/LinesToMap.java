@@ -27,4 +27,12 @@ public class LinesToMap {
                 "lst_360day_refuse_cnt\n";
         System.out.println(JSON.toJSONString(getMap(str)));
     }
+
+    public void test2(){
+        String str="customerId\n" +
+                "appId\n" +
+                "certId\n" +
+                "userType\n";
+
+    }
 }

@@ -54,4 +54,21 @@ public class FreeMarkTemplateService {
         model.put("ary",split);
         System.out.println(parsingTemplate("2",sql,model));
     }
+    @Test
+    public void testIf() throws IOException, TemplateException {
+        String sql="select * from abc where 1 = 1 <#if customerId ?? && customerId != \"\"> and customer_id = :customerId</#if>";
+        HashMap<String,Object> model=new HashMap<String,Object>();
+        model.put("customerId","");
+        System.out.println(parsingTemplate("2",sql,model));
+    }
+    @Test
+    public void testUndercharge() throws IOException, TemplateException {
+        String sql="select app_id,cert_id,customer_id,user_type from rep_wk_cs_reduce_repay where 1=1 <#if appId ?? && appId != \"\"> and app_id =:appId</#if><#if certId ?? && certId != \"\"> and cert_id =:certId</#if><#if customerId ?? && customerId != \"\"> and customer_id =:customerId</#if><#if userType ?? && userType != \"\"> and user_type =:userType</#if>";
+        HashMap<String,Object> model=new HashMap<String,Object>();
+        model.put("customerId","a");
+        model.put("appId","a");
+        model.put("certId","a");
+        model.put("userType","a");
+        System.out.println(parsingTemplate("2",sql,model));
+    }
 }

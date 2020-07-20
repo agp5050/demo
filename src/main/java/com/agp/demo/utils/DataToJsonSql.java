@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import org.junit.Test;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class DataToJsonSql {
     public static String toJson(String dataOutputs){
@@ -176,6 +177,23 @@ public class DataToJsonSql {
         System.out.println(JSON.toJSONString(rst));
     }
 
+    public static void getInputLineJson(String inputsLines){
+        System.out.println("List入参列表：");
+        StringBuilder sb=new StringBuilder();
+        Map<String,String> map=new HashMap<>();
+        Arrays.asList(inputsLines.split("\n")).stream()
+                .map(item -> item.trim())
+                .forEach(item->{
+                    sb.append(item).append(",");
+                    map.put(item,item);
+                });
+        System.out.println(sb.substring(0,sb.length()-1));
+        System.out.println("JSON 入参：");
+        System.out.println(JSON.toJSONString(map));
+
+
+    }
+
 
     @Test
     public void testInvete(){
@@ -340,6 +358,24 @@ public class DataToJsonSql {
         getOutputs(str);
         getInputList(inputs);
         getInputsJson(inputs);
+    }
+
+    @Test
+    public void testGetUnderchargeApi(){
+        String inputs="customerId\n" +
+                "appId\n" +
+                "certId\n" +
+                "userType\n";
+        String outputs="appId\n" +
+                "certId\n" +
+                "customerId\n" +
+                "userType";
+        String table="rep_wk_cs_reduce_repay";
+        String tableField="app_id,cert_id,customer_id,user_type";
+        String inputsFiled="customerId,appId,certId,userType";
+        getInputLineJson(inputs);
+//        getOutputs(outputs);
+//        getMysql();
     }
 
     public static void main(String[] args) {
