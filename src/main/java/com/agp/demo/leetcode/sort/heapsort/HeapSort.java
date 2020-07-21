@@ -17,6 +17,7 @@ public class HeapSort<T extends Comparable<T>> {
                    if (ary[fatherIndex].compareTo(ary[j])<0){
                        swap(ary,fatherIndex,j);
                    }
+                   //如果是降序排序，需要构建最小顶堆
                 }else {
                     if (ary[fatherIndex].compareTo(ary[j])>0){
                         swap(ary,fatherIndex,j);
