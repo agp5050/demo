@@ -10,7 +10,7 @@ public class HighestOneAllOne {
      * @param cap
      * @return
      * 正整數最高位肯定是1. 這個方法就是将1像左移1位。然后再移两位再移四位。 逐渐将最高位1的左边全部设定为1.
-     * 比如3-》11  7-》111  15-》1111 这样.就是将原来最接近的下一个2的幂次方-1
+     * 比如3-》11  7-》111  15-》1111 这样.就是将原来最接近的下一个2的幂次方
      */
     static final int tableSizeFor(int cap) {
         int n = cap - 1;
