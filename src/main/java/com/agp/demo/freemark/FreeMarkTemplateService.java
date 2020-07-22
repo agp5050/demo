@@ -61,9 +61,10 @@ public class FreeMarkTemplateService {
         model.put("customerId","");
         System.out.println(parsingTemplate("2",sql,model));
     }
+    @RightInvoke("这种SQL中条件都进行了判空，如果对方空调，这样会出现selectAll情况。爆掉内存，所以要根据情况加上limit n")
     @Test
     public void testUndercharge() throws IOException, TemplateException {
-        String sql="select app_id,cert_id,customer_id,user_type from rep_wk_cs_reduce_repay where 1=1 <#if appId ?? && appId != \"\"> and app_id =:appId</#if><#if certId ?? && certId != \"\"> and cert_id =:certId</#if><#if customerId ?? && customerId != \"\"> and customer_id =:customerId</#if><#if userType ?? && userType != \"\"> and user_type =:userType</#if>";
+        String sql="select app_id,cert_id,customer_id,user_type from rep_wk_cs_reduce_repay where 1=1 <#if appId ?? && appId != \"\"> and app_id =:appId</#if><#if certId ?? && certId != \"\"> and cert_id =:certId</#if><#if customerId ?? && customerId != \"\"> and customer_id =:customerId</#if><#if userType ?? && userType != \"\"> and user_type =:userType</#if> limit 10";
         HashMap<String,Object> model=new HashMap<String,Object>();
         model.put("customerId","a");
         model.put("appId","a");
