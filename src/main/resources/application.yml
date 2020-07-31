@@ -1,10 +1,16 @@
 spring:
   application:
     name: demo
+  cache:
+    cache-names: agp,test
+    caffeine:
+      spec: maximumSize=500,expireAfterAccess=600s
 #  datasource:
 #    url: aaa
 #    username: aasdf
 #    password:
 #    type: com.zaxxer.hikari.HikariDataSource
 #    hikari:
+server:
+  port: 8090
 #      driver-class-name:

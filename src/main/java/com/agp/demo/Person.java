@@ -1,8 +1,17 @@
 package com.agp.demo;
 
 public class Person {
+    private Integer id;
     private String name;
     private Integer age;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

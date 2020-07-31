@@ -1,6 +1,7 @@
 package com.agp.demo.cache;
 
 import com.agp.demo.annotation.TestIntension;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,7 +13,8 @@ public class SpringCacheTest {
             "而不需要再次执行该方法。")
     @Cacheable
     class UseCass{
-        @Cacheable
+        @CachePut // creat update
+        @Cacheable // get
         public String query(HttpServletRequest request){
             return "";
         }
