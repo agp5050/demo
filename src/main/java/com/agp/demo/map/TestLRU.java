@@ -3,6 +3,7 @@ package com.agp.demo.map;
 import com.alibaba.fastjson.JSON;
 
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 
 public class TestLRU<K,V> extends LinkedHashMap<K,V> {
