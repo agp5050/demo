@@ -52,8 +52,8 @@ public class NodeBlockLock implements ZookeeperLock {
                         System.out.println(countDownLatch.hashCode()+" hashcode");
                         this.countDownLatch.await();
                         this.countDownLatch=null;
-                        retryTimes++;
                     }
+                    retryTimes++;
                     getZooKeeper().create(guidNodeName, clientGuid.getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL);
                     locked=true;
                     System.out.println(Thread.currentThread().getName()+" has retry locked for "+retryTimes+" times.");
