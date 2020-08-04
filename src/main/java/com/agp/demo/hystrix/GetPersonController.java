@@ -7,6 +7,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import rx.Observable;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-//TODO  为什么第二次访问，就开始返回[]，实际command是有结果的啊。？
+//TODO  为什么第二次访问，就开始返回[]，实际command是有结果的啊。？ GetPersonCommand
 @RestController
 @Slf4j
 public class GetPersonController {
@@ -29,6 +30,20 @@ public class GetPersonController {
         //这个服务的其他上游服务也可能导致雪崩。
         Person execute = getPersonCommand.execute();
         return JSON.toJSONString(execute);
+    }
+    @GetMapping("/getPersons")
+    public String getPersons(String ids){
+        List<Person> list=new ArrayList<>();
+        for (String id:ids.split(",")){
+            GetPersonCommand getPersonCommand = new GetPersonCommand(Integer.valueOf(id));
+            Person execute = getPersonCommand.execute();
+            boolean responseFromCache = getPersonCommand.isResponseFromCache();
+            System.out.println("is from cache:"+responseFromCache);
+            System.out.println(execute);
+
+            list.add(execute);
+        }
+        return JSONArray.toJSONString(list);
     }
     @GetMapping("/getPersonAsync")
     public String getPersonAsync(Integer id){
@@ -115,8 +130,10 @@ public class GetPersonController {
         return JSONArray.toJSONString(list);
     }
 
-    @GetMapping("/getByAnnotation")
-    @HystrixCommand(commandKey = "query", commandProperties = {
+    @PostMapping ("/getByAnnotation")
+    @HystrixCommand(groupKey = "testAnnotation",commandKey = "query", threadPoolProperties = {
+            @HystrixProperty(value = "20",name ="coreSize")
+    },commandProperties = {
             @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "750")
     }, fallbackMethod = "queryDataTimeOut")
     public String getByAnnotation(@RequestBody Person person){
@@ -127,7 +144,7 @@ public class GetPersonController {
     private String getString() {
         try {
             //InterruptedException: sleep interrupted  被Hystrix线程池接管后，超时中断了
-            Thread.currentThread().sleep(1700);
+            Thread.currentThread().sleep(700);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

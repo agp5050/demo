@@ -9,6 +9,12 @@ import rx.schedulers.Schedulers;
 
 public class GetPersonsCommand extends HystrixObservableCommand<Person> {
     private String name;
+
+    @Override
+    protected String getCacheKey() {
+        return "person:"+name;
+    }
+
     public GetPersonsCommand(String name ) {
         super(HystrixCommandGroupKey.Factory.asKey("exampleObservable"));
         this.name=name;

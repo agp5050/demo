@@ -13,9 +13,19 @@ public class GetPersonCommand extends HystrixCommand<Person> {
     }
 
     @Override
+    protected Person getFallback() {
+        return new Person();
+    }
+
+    @Override
+    protected String getCacheKey() {
+        return "person:"+id;
+    }
+
+    @Override
     protected Person run() throws Exception {
         //DO HttpRequest with ( personId) to getPerson
-//        Thread.currentThread().sleep(2000);
+        Thread.currentThread().sleep(2000);
         Person person=new Person();
         person.setId(id);
         person.setName("test");
