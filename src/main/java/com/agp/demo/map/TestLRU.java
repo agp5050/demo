@@ -2,6 +2,7 @@ package com.agp.demo.map;
 
 import com.alibaba.fastjson.JSON;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -24,6 +25,9 @@ public class TestLRU<K,V> extends LinkedHashMap<K,V> {
     }
 
     public static void main(String[] args) {
+         Map map=new HashMap(2<<14);  /**初始化Map正确姿势*/
+
+
         TestLRU<String, Integer> stringIntegerTestLRU = new TestLRU<>(2);
         System.out.println("Size:"+stringIntegerTestLRU.size());
         stringIntegerTestLRU.put("a",1);

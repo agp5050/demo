@@ -24,6 +24,7 @@ public class GetWifeCommand extends HystrixCommand<String> {
                         .withCircuitBreakerErrorThresholdPercentage(60) //时间段内，如果没有达到60%触发率也是不触发短路. default 50
                         .withCircuitBreakerSleepWindowInMilliseconds(10000) //default 5000ms ，触发短路后，尝试休眠多久后再
                         //半开断路器 half_open
+                        .withExecutionTimeoutInMilliseconds(750)  //默认1s超时。不是两秒了。。
                 )
         )
         ;
