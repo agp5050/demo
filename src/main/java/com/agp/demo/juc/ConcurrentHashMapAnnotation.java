@@ -1,5 +1,6 @@
 package com.agp.demo.juc;
 
+import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -14,4 +15,5 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ConcurrentHashMapAnnotation {
     ConcurrentHashMap map;
+    HashMap map2; //里面没有CAS的锁操作，和synchronized 。单线程速度快。
 }
