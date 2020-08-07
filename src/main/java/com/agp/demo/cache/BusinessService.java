@@ -7,6 +7,8 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -49,13 +51,14 @@ public class BusinessService {
         }
         return map.get(id);
     }
-
+    @Transactional(propagation = Propagation.REQUIRED )
     @CacheEvict(value = "agp",key = "#person.id")
     public void del(Person person){
         if (map.containsKey(person.getId())){
             map.remove(person.getId());
         }
     }
+    @Transactional(propagation = Propagation.REQUIRED )
     public String getMap(){
         return JSON.toJSONString(map);
     }
