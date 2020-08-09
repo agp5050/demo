@@ -9,13 +9,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-
-public class SocketServerTest {
+/**
+ * BIO Server demo
+ */
+public class BIOSocketServerTest {
     public static void main(String[] args) throws IOException {
-        new SocketServerTest().test();
+        new BIOSocketServerTest().test();
 //        // TODO 自动生成的方法存根
 //
 //        String readline = null;

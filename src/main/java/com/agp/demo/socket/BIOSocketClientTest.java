@@ -12,9 +12,12 @@ import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
-public class SocketClientTest {
+/**
+ * BIO demo
+ */
+public class BIOSocketClientTest {
     public static void main(String[] args) throws IOException {
-        new SocketClientTest().testConnect();
+        new BIOSocketClientTest().testConnect();
 //        new SocketClientTest().testReadLine();
 //            // TODO 自动生成的方法存根
 //
