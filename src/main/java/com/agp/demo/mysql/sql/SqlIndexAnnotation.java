@@ -1,4 +1,4 @@
-package com.agp.demo.sql;
+package com.agp.demo.mysql.sql;
 
 /**
  * Innodb 事务、外键、聚簇索引（索引和Data是一个文件），id auto increment最好，顺序分裂。

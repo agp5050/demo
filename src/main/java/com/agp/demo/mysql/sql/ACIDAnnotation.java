@@ -1,4 +1,4 @@
-package com.agp.demo.sql;
+package com.agp.demo.mysql.sql;
 
 /**
  * A atomic
