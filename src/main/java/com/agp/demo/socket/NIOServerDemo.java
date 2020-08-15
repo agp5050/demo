@@ -32,7 +32,7 @@ public class NIOServerDemo {
 
 
         // 绑定channel的accept
-        serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
+        SelectionKey register = serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
     }
 
     public static void main(String[] args) throws Exception{
@@ -42,13 +42,17 @@ public class NIOServerDemo {
     private void go() throws Exception{
 
         // block api
+        //selector.select() 多路复用器，模拟调用内核select ,poll ,epoll。如果返回值大于0，说明有对应的
+        //socket chanel 来数据了。
         while(started && selector.select()>0){
 
             Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();
             while(iterator.hasNext()){
                 SelectionKey selectionKey = iterator.next();
+                //可能会导致死循环
                 iterator.remove();
-                // 新连接
+                // 新连接 Tests whether this key's channel is ready to accept a new socket
+                //     * connection
                 if(selectionKey.isAcceptable()){
                     System.out.println("isAcceptable");
                     ServerSocketChannel server = (ServerSocketChannel)selectionKey.channel();
@@ -61,6 +65,7 @@ public class NIOServerDemo {
                     socketChannel.configureBlocking(false);
                     // 注意！这里和阻塞io的区别非常大，在编码层面之前的等待输入已经变成了注册事件，这样我们就可以在等待的时候做别的事情，
                     // 比如监听更多的socket连接，也就是之前说了一个线程监听多个socket连接。这也是在编码的时候最直观的感受
+                    //因为是新连接，所以也要注册到selector上面。
                     socketChannel.register(selector, SelectionKey.OP_READ| SelectionKey.OP_WRITE);
 
 
@@ -76,14 +81,22 @@ public class NIOServerDemo {
                     SocketChannel socketChannel = (SocketChannel)selectionKey.channel();
 
                     readBuffer.clear();
-                    socketChannel.read(readBuffer);
-                    readBuffer.flip();
+                    int read = socketChannel.read(readBuffer);
+                    if (read>0){
 
-                    String receiveData= Charset.forName("UTF-8").decode(readBuffer).toString();
-                    System.out.println("receiveData:"+receiveData);
+                        readBuffer.flip();
 
-                    // 把读到的数据绑定到key中
-                    selectionKey.attach("server message echo:"+receiveData);
+                        String receiveData= Charset.forName("UTF-8").decode(readBuffer).toString();
+                        System.out.println("receiveData:"+receiveData);
+
+                        // 把读到的数据绑定到key中
+                        selectionKey.attach("server message echo:"+receiveData);
+                    }else if(read==0){ //The number of bytes read, possibly zero, or <tt>-1</tt> if the
+                                        //     *          channel has reached end-of-stream
+                        continue;
+                    }else {  // -1  close_wait 死循环 100% CPU
+                        socketChannel.close();  //需要关掉，以免导致死循环。
+                    }
                 }
 
                 // 实际上服务端不在意这个，这个写入应该是client端关心的，这只是个demo,顺便试一下selectionKey的attach方法

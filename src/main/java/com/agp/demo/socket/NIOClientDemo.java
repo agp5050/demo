@@ -8,7 +8,6 @@ import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
-import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.Charset;
 import java.util.Iterator;
@@ -21,7 +20,7 @@ public class NIOClientDemo {
 
     public NIOClientDemo()throws IOException {
         SocketChannel socketChannel = SocketChannel.open();
-        socketChannel.connect(new InetSocketAddress(InetAddress.getLocalHost(),8080));
+        socketChannel.connect(new InetSocketAddress(InetAddress.getLocalHost(),8090));
         socketChannel.configureBlocking(false);
         System.out.println("与服务器的连接建立成功");
         selector=Selector.open();
