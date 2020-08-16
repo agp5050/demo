@@ -1,6 +1,5 @@
 package com.agp.demo.socket;
 
-import org.junit.Test;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -63,20 +62,37 @@ public class BIOSocketServerTest {
 //        socket.close();
 //        serverSocket.close();
     }
-    @Test
     public void test() throws IOException {
 
         ServerSocket serverSocket=new ServerSocket(9090);
-        Socket accept = serverSocket.accept();
-        InputStream inputStream = accept.getInputStream();
-        OutputStream outputStream = accept.getOutputStream();
-        BufferedWriter bufferedWriter=new BufferedWriter(new OutputStreamWriter(outputStream));
-        BufferedReader bufferedReader=new BufferedReader(new InputStreamReader(inputStream));
-        String line;
-        while ((line=bufferedReader.readLine())!=null){
-            System.out.println("Remote said: "+line);
-            bufferedWriter.write("Server get the msg:"+line+"\n");
-            bufferedWriter.flush();
+        while (true){
+            Socket accept = serverSocket.accept();
+            new Thread(()->{
+                InputStream inputStream = null;
+                try {
+                    inputStream = accept.getInputStream();
+                    OutputStream outputStream = accept.getOutputStream();
+                    BufferedWriter bufferedWriter=new BufferedWriter(new OutputStreamWriter(outputStream));
+                    BufferedReader bufferedReader=new BufferedReader(new InputStreamReader(inputStream));
+                    String line;
+                    while ((line=bufferedReader.readLine())!=null){
+                        System.out.println("Remote said: "+line);
+                        bufferedWriter.write("Server get the msg:"+line+"\n");
+                        bufferedWriter.flush();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }finally {
+                    try {
+                        accept.close();
+                        System.out.println("Client closed ...");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }).start();
         }
+
     }
 }

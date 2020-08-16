@@ -49,7 +49,8 @@ public class NIOServerDemo {
             Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();
             while(iterator.hasNext()){
                 SelectionKey selectionKey = iterator.next();
-                //可能会导致死循环
+                //可能会导致死循环 ,比如这个里面是isAcceptable，里面会创建一个新的chanel，并注册到selector。
+                //也就是添加到了iter，如果不remove，循环遍历的时候还会再注册一个channel，以此循环就死循环了。
                 iterator.remove();
                 // 新连接 Tests whether this key's channel is ready to accept a new socket
                 //     * connection
