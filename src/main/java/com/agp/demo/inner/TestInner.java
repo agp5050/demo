@@ -6,6 +6,7 @@ import org.junit.Test;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 @Slf4j
 public class TestInner {
@@ -28,6 +29,18 @@ public class TestInner {
         while (iterator.hasNext()){
             String next = iterator.next();
             System.out.println(next);
+        }
+    }
+
+    @Test
+    public void testTokenizer(){
+        String a="aa  bb cc \t dd \f \n   aaa \t eee \n bbb";
+        StringTokenizer stringTokenizer=new StringTokenizer(a);
+        int i=0;
+        while (stringTokenizer.hasMoreTokens()){
+            String s = stringTokenizer.nextToken();
+            System.out.println(i+s);
+            ++i;
         }
     }
 
