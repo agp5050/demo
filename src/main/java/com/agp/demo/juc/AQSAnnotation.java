@@ -28,7 +28,6 @@ import java.util.concurrent.locks.ReentrantLock;
 */
 public class AQSAnnotation {
     static ReentrantLock lock=new ReentrantLock(); //默认非公平锁    -》 new ReentrantLock(true)公平锁
-
     public static void main(String[] args) {
         /**
          * AQS核心 state=1和一个 当前加锁线程引用。 和一个加锁队列 Queue。 如果竞争加锁失败，入Queue。
