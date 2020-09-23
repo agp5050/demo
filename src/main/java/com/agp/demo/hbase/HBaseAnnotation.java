@@ -20,4 +20,46 @@ package com.agp.demo.hbase;
 *
 * */
 public class HBaseAnnotation {
+    /*启动方式1： bin/hbase-daemon.sh start master
+    * bin/hbase-daemon.sh start regionserver*/
+
+    /*启动方式2：bin/start-hbase.sh
+    * bin/stop-hbase.sh*/
+    /*/bin/hbase 客户端  create 'abc','info'  第一个是表名，第二个是列族名*/
+    /*列所有表 list*  describe abc 详细信息/
+    /*插入命令put 'student','1001', 'info:sex', male'    1001 rowKey  */
+    /*常用命令 scan 'abc'*/
+    /*Cell -> {rowkey ,column family:column,version}  version 使用timestamp作为区分*/
+    /*Namespace 类似于DB，表所在DB    --》 list_namespace ,  create_namespace 'agp' */
+    /*指定命名空间建表  create 'agp:test','info'*/
+
+    /**hbase:meta是hbase的元数据表，记录各个region所在副服务器。 --》那meta表在哪个regionserver， zookeeper
+     * 专门的节点/hbase/meta-region-server里面存储了 meta表所在节点信息*/
+    /*根据Hbase的读取流程，可以发现不是即席查询，主要是用来统计分析用的*/
+
+    /*MemStore写缓存    BlockCache读缓存  查询数据时先从写缓存查，然后读缓存查询，最后才从StoreFile 也就是HFile（hadoop file）
+    * 先写回到blockcache里面再返回给客户端。*/
+    /*merge  128 limit内存， 3个merge小文件进行合并， 超过256M进行拆分region*/
+    /*api   Table  Get-》封装rowKey  Table.get(get)*/
+    /*api Put->封装rowkey， put.addColumn(f, qualifier,value 全部是bytes) Table.put(put)*/
+    /*api Result.rawCells 遍历 Bytes.toString( ....) clone的都是字节码
+     CellUtil.cloneValue(cell)-kvs  cloneRow->rowkey  cloneFamily->f cloneQualifier()*/
+    /*bin/hbase  mapredcp  -> 展示向hadoop lib目录copy哪些jar包过去。*/
+    /*hadoop-env.sh里面加入 export HADOOP_CLASSPATH=$HADOOP_CLASSPATH:/opt/module/hbase/lib/*/
+    /*过滤搜索也很慢，每条数据都会筛选，性能比较低*/
+    /*BinaryComparator,RegexStringComparator 比较器 --》RowFilter里面加上比较器 过滤器过滤rowkey-->scan.setFilter(f)
+     OR
+     FilterList
+     --->table.getScanner(scan)*/
+    /*log文件 ==> uuid_appName_timestamp*/
+    /*FilterList */
+
+
+    /**Hbase没有索引概念，但是可以模拟索引，进行查询优化 可以新建一个abc_index表，里面比如经常查询的userName为rowkey
+     * abc表插入同名的rowkey时，这个abc_index ,在f列族里面添加一个column=rowkey的列，这样查询时，查询abc_index获取所有的
+     * column，然后根据column查询所有对应的abc里面的row。*/
+
+
+    /*RowKey设计 三原则：唯一 ，散列（），长度原则（64bit系统，8字节的倍数，长度设计为8字节倍数）
+    * sha1 散列，或者 timestamp反转字符串，或者日期反转字符串*/
 }
