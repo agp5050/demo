@@ -66,4 +66,11 @@ package com.agp.demo.zookeeper;
  *
  * */
 public class ZookeeperAnnotation {
+    /* 崩溃恢复阶段会进行数据同步 */
+
+    /*所有的事务请求都由 Leader 节点来处理 -->事务请求转换为事务 Proposal
+    * -->完成广播之后，Leader 等待 Follwer 反馈 ACK ***当有过半数的 Follower 反馈信息后
+    * -->Leader 将再次向集群内 Follower 广播 Commit 信息*/
+    /*leader和follower收到请求后都落磁盘*/
+    /**过半确认机制，ZAB和leader选举*/
 }

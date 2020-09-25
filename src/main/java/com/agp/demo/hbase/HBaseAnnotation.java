@@ -1,5 +1,7 @@
 package com.agp.demo.hbase;
 
+import java.util.HashMap;
+
 /**
  * 1. 分布式架构，多个regionServer 分布式管理数据，分布式执行各个nosql数据操作
  * 2.分布式数据存储、自动数据分片     （存储到各个region上面，region达到一定程度会分裂成两个）
@@ -62,4 +64,25 @@ public class HBaseAnnotation {
 
     /*RowKey设计 三原则：唯一 ，散列（），长度原则（64bit系统，8字节的倍数，长度设计为8字节倍数）
     * sha1 散列，或者 timestamp反转字符串，或者日期反转字符串*/
+
+    /**每一个region维护一个startRow和endRow*/
+
+    /**创建预分区*/
+    //1.手动
+    /*create tableName,columnFamily,SPLITS=>['1000','2000','3000','4000']*/
+    /*结果查看Hbase预分区.png*/
+//    2.生成16进制序列预分区
+    /*create tableName,columnFamily,{NUMREGIONS=> 15, SPLITALGO => 'HexStringSplit'}*/
+//生成一个以 11111111,22222222,33333333....99999999....aaaaaaaa...eeeeeeee这14个字符串作为middleKey。
+//    3.按照文件里面的row内容作为middleKey进行分区
+    /*create tableName,columnFamily,SPLITS_FILE=>'splits.txt'*/
+    HashMap map;
+
+    public static void main(String[] args) {
+        System.out.println("z".hashCode());
+        System.out.println("a".hashCode());
+        System.out.println("1".hashCode());
+        System.out.println("9".hashCode());
+
+    }
 }
