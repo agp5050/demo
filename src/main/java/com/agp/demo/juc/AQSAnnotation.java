@@ -28,6 +28,18 @@ import java.util.concurrent.locks.ReentrantLock;
 */
 public class AQSAnnotation {
     static ReentrantLock lock=new ReentrantLock(); //默认非公平锁    -》 new ReentrantLock(true)公平锁
+    /*ReentrantLock锁靠同步器实现（Sync），Sync又分为FairSync公平同步器，
+    * 和NonFairSync非公平同步器。 lock区别是
+    * NonFairSync：直接先尝试设定state为1，然后设置ownerThread为当前thread。然后再acquire
+    *
+    * if (compareAndSetState(0, 1))
+                setExclusiveOwnerThread(Thread.currentThread());
+            else
+                acquire(1);
+                *
+    * FairSync和NonFairSync区别二： tryAcquire方法：
+    * FairSync的tryAcquire里面有同步器队列飞空检查。如果非空就失败。空的就尝试设置state并设置当前thread为owner。
+    *!hasQueuedPredecessors()*/
     public static void main(String[] args) {
         /**
          * AQS核心 state=1和一个 当前加锁线程引用。 和一个加锁队列 Queue。 如果竞争加锁失败，入Queue。
@@ -42,6 +54,13 @@ public class AQSAnnotation {
          */
         lock.unlock();
 
+
+        /*shouldParkAfterFailedAcquire(Node pred, Node node)  循环执行。 将node添加到queue队尾后，
+        * 从后向前遍历，如果prev的waitingStatus是>0 即canceled就一直向前，直到prev.waitingStatus<0  (-1 SINGLE -2 CONDITION)
+        * 继续外循环，如果prev.waitingStatus==-1 也就是前一个Node的waitingStatus=SINGLE时，当前Node park。
+        * 如果prev是head队首,直接park当前node然后设定当前node为head。之前head GC掉*/
+
+        /**Sync  lock 、 release  加锁和释放锁*/
 
     }
 }
