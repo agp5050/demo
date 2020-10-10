@@ -26,6 +26,7 @@ public class DynamicClassLoader extends ClassLoader {
 
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
+        // or byte[] loadClassDataFromLocalFile(name) 或者从从本地加载
         return defineClass(name,classBytes,0,classBytes.length);
     }
 

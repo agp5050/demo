@@ -67,4 +67,8 @@ public class BlockingQueueAnnotation {
     /** 综合AQS的ConditionObject利用了Node双向队列数据结构。但是ConditionObject在构建队列时，只是用Node构建的单向队列。
      * 所以必须有3个指针指向Before，Now，after*/
     /*AQS自己的queue队列，里面构建的是双向指针。head，tail指向了首尾。*/
+
+
+
+    /**enqueue 入队， dequeue离队两个主要的方法*/
 }
