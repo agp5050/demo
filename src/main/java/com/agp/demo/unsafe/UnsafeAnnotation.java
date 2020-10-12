@@ -15,6 +15,13 @@ public class UnsafeAnnotation {
     /**JUC下的AtomicIntegerArray 根据偏移量内存快速寻找地址如下
      *  unsafe.getAndSetInt(array, checkedByteOffset(i), newValue);*/
 
+     /*AtomicIntegerFieldUpdater<T> 可以对泛型T类型的指定name的field进行原子更新
+     * 根据反射,获取field，每个field在instance里面都有固定的偏移量。 然后
+     * U.compareAndSwapInt(obj, offset, expect, update) 根据特定的instance，和偏移量确定要更新的
+     * int field的地址。 */
+     /**AtomicIntegerFieldUpdater<T> 各个线程必须使用同一个updater，因为必须确保都用同一个的
+      * unsafe对象进行cas 多个unsafe肯定不行的( field 必须为volatile)*/
 
-    /*compareAndSet  getAndSet getAndIncrement区别，第一个是比较一次。 第二三个是循环取出比较然后设定新值直到成功*/
+    /**compareAndSet  getAndSet getAndIncrement区别，第一个是比较一次。
+     *  第二三个是循环取出比较然后设定新值直到成功*/
 }

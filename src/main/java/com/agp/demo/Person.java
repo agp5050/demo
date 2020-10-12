@@ -1,7 +1,7 @@
 package com.agp.demo;
 
 public class Person {
-    private Integer id;
+    public volatile int id;
     private String name;
     private Integer age;
     public Person(){}
