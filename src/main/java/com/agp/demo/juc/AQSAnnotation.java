@@ -62,5 +62,13 @@ public class AQSAnnotation {
 
         /**Sync  lock 、 release  加锁和释放锁*/
 
+
+        /** 综合AQS的ConditionObject利用了Node双向队列数据结构。但是ConditionObject在构建队列时，只是用Node构建的单向队列。
+         * 所以必须有3个指针指向Before，Now，after*/
+        /*AQS自己的queue队列，里面构建的是双向指针。head，tail指向了首尾。*/
+        /**ConditionObject 里面的doSingle ==》transferForSignal
+         * 将ConditionObject上面的队列的first开始遍历，保证成功发送一个。到
+         * AQS对象里面的head tail队列。并将Condition状态从-1 改成0. 然后 enq 并将前一个设置为single状态。然后LockSupport.unpark()*/
+
     }
 }

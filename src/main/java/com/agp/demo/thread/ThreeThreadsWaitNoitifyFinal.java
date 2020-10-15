@@ -11,6 +11,7 @@ public class ThreeThreadsWaitNoitifyFinal {
         for (int i=0;i<100;i++){
             int finalI = i;
             new Thread(()->{
+
                 switch (finalI %3){
                     case 0: firstMtd();
                         break;

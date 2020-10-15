@@ -22,8 +22,8 @@ public class ThreadTest {
                 while (true){
                     i++;
                     try {
-                        this.sleep(100);
-                        if (i>20) {
+                        this.sleep(1000);
+                        if (i>10) {
                             log.info("thread is interrupted before interrupt:{}",this.isInterrupted());
 
                             log.info("thread is interrupted after interrupt:{}",this.isInterrupted());
