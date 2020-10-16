@@ -4,6 +4,7 @@ import com.agp.demo.Person;
 import sun.misc.Unsafe;
 
 import java.lang.reflect.Field;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Test {
@@ -33,6 +34,12 @@ public class Test {
         int a=10;int b=20;
         int c=0;
         add(c=a,c+b);  //先赋值第一个。 更新c的值，然后将更新后的值用到第二个参数。
+
+        System.out.println(1 << 2);
+        Random random = new Random();
+        random.ints(100L,0,1000).forEach(i1-> System.out.println(i1)); //无限循环打印随机整数。
+        System.out.println(Double.doubleToRawLongBits(1.1));
+        System.out.println(Double.longBitsToDouble(4607632778762754458L));
     }
     @org.junit.Test
     public void testCircuit(){
