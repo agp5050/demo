@@ -70,5 +70,24 @@ public class AQSAnnotation {
          * 将ConditionObject上面的队列的first开始遍历，保证成功发送一个。到
          * AQS对象里面的head tail队列。并将Condition状态从-1 改成0. 然后 enq 并将前一个设置为single状态。然后LockSupport.unpark()*/
 
+
+
+        /*Lock  tryAquire 不成功=》 acquireQueued park到 AQS对象上面。
+        * ConditionObject 等待队列park到 ConditionObject对象上面。
+        * */
+        /**await（）只有AQS lock后，才能await。
+         * await里面会release 外边AQS队列park的thread。 其他thread会继续lock住，然后await到ConditionObject阻塞
+         *
+         * 等到signal后 继续执行 acquireQueued 查看能不能获取获取到外部AQS的对象锁。获取成功后即可向下执行。获取失败后，继续
+         * park到当前ConditionObject上面。*/
+
+        /*释放锁两种方式：unlock ... AQS.release*/
+
+
+        /*awaitNanos -》parkNanos  -->被唤醒之后 tryAcquire外部的AQS锁，如果成功就可以继续。不成功
+        * 继续park到当前的ConditionObject上面去*/
+        /**awaitNanos相当于最多n 时间后，自动唤醒一次（类似被signal然后当前线程被unpark），然后尝试进行
+         * 获取外部AQS锁，如果不成功仍然跟await一样继续park到ConditionObject对象。*/
+
     }
 }

@@ -1,5 +1,6 @@
 package com.agp.demo.futrue;
 
+import com.alibaba.druid.support.json.JSONUtils;
 import com.alibaba.fastjson.JSON;
 import groovy.lang.Tuple2;
 import org.junit.Test;
@@ -11,6 +12,7 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * CompletableFuture 提供了，各个task依赖执行。
@@ -51,5 +53,47 @@ public class CompletableFutureTest {
 
         Map<String, Long> collect1 = strings.stream().collect(Collectors.groupingBy(i -> i, Collectors.counting()));
         System.out.println(JSON.toJSONString(collect1));
+
+    }
+
+    /**
+     * stream map_reduce主要靠Collector的groupingBy
+     */
+    @Test
+    public void testFuture2(){
+        CompletableFuture<Object> handle = CompletableFuture.completedFuture(Arrays.asList(1, 1, 2, 2, 3))
+                .thenApply(x -> x.stream().map(i -> i * i))
+                .thenAccept(item -> item.map(i -> new Tuple2(i, 1))
+                                .collect(Collectors.groupingBy(i -> i.getFirst()))
+                                .entrySet().stream()
+                                .forEach(i -> System.out.println(i.getKey() + " : " + i.getValue().size()))
+//                        .forEach(item2-> System.out.println(Thread.currentThread().getName()+item2))
+                ).thenRun(() -> {
+                    System.out.println(Thread.currentThread().getName() + "finished.");
+                    throw new RuntimeException("construct a error...");
+                }).whenComplete((a, throwable) -> {
+                    if (throwable != null) {
+                        System.out.println(throwable.getCause());
+                        ;
+                    } else {
+                        System.out.println("end normally ...");
+                    }
+                }).handle((a, t) -> {
+                    if (t == null) return a;
+                    else {
+                        System.out.println("handle...");
+                        ;
+                        return t.getCause();
+                    }
+                });
+
+            handle.thenAccept(a-> {if (a instanceof Stream){
+                Stream a1=(Stream)a;
+                a1.forEach(i-> System.out.println(i));
+            }else {
+                System.out.println(a);
+            }
+            });
+
     }
 }

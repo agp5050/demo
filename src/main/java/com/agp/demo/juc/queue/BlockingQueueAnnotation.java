@@ -1,4 +1,4 @@
-package com.agp.demo.juc;
+package com.agp.demo.juc.queue;
 
 import java.util.concurrent.BlockingQueue;
 

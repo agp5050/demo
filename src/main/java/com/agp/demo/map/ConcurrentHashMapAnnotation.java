@@ -19,4 +19,20 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ConcurrentHashMapAnnotation {
     ConcurrentHashMap map;
+    static  int RESIZE_STAMP_BITS=16;
+    public static void main(String[] args) {
+        System.out.println(resizeStamp(16));
+        System.out.println(1<<15);
+        System.out.println((1<<15)>>>16);
+        System.out.println(23 << 32 );
+        System.out.println(32795-(1<<15));
+        System.out.println(-1 >>> 32);
+        System.out.println(-1 >>> 31);
+        System.out.println(-1 >>> 33);
+        System.out.println(1 >>>33);
+        System.out.println(1 << 30);
+    }
+    static final int resizeStamp(int n) {
+        return Integer.numberOfLeadingZeros(n) | (1 << (RESIZE_STAMP_BITS - 1));
+    }
 }
