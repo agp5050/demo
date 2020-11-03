@@ -89,5 +89,9 @@ public class AQSAnnotation {
         /**awaitNanos相当于最多n 时间后，自动唤醒一次（类似被signal然后当前线程被unpark），然后尝试进行
          * 获取外部AQS锁，如果不成功仍然跟await一样继续park到ConditionObject对象。*/
 
+        /*X86平台上的CAS操作一般是通过CPU的CMPXCHG指令来完成的。
+        CPU在执行此指令时会首先锁住CPU总线，
+        禁止其它核心对内存的访问，然后再查看或修改*ptr的值。
+        简单的说CAS利用了CPU的硬件锁来实现对共享资源的串行使用。*/
     }
 }

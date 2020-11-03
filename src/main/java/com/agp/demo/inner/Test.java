@@ -40,6 +40,10 @@ public class Test {
         random.ints(100L,0,1000).forEach(i1-> System.out.println(i1)); //无限循环打印随机整数。
         System.out.println(Double.doubleToRawLongBits(1.1));
         System.out.println(Double.longBitsToDouble(4607632778762754458L));
+
+
+        System.out.println(0x80000000);
+        System.out.println(1<<31);
     }
     @org.junit.Test
     public void testCircuit(){

@@ -3,6 +3,7 @@ package com.agp.demo.inner;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -43,6 +44,36 @@ public class TestInner {
             ++i;
         }
     }
+    @Test
+    public void testBitAccumulate(){
+        System.out.println(1 & ~2);
+        System.out.println(~2 & 2);
+        System.out.println(~4 & 4);
+        System.out.println((1<<31) +3);
+        HashMap hashMap;
+    }
+    @Test
+    public void testAutoIncDec(){
+        int i=0,j=0;
+        System.out.println(i--);  //0
+        System.out.println(--j); //-1
+        for (int it=0; it ++ < 4;){
+            System.out.println(it);
+        }
+    }
+    @Test
+    public void testBreakFor(){
+        outer:for (int i=0;i<10;i++){
+            for (int j=100;j>i;--j){
+                System.out.println(j);
+                if (j==20){
+                    break outer;
+                }
+            }
+        }
+    }
+
+
 
 
 }
