@@ -14,6 +14,7 @@ public class JucTest {
     }
     @Test
     public void testAtomicIntegerFieldUpdater(){
+        Thread a;
         AtomicIntegerFieldUpdater<Person> atomicIntegerFieldUpdater = AtomicIntegerFieldUpdater.newUpdater(Person.class, "id");
         Person person = new Person();
         atomicIntegerFieldUpdater.getAndIncrement(person);

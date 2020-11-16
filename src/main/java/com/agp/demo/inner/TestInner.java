@@ -49,7 +49,13 @@ public class TestInner {
         System.out.println(1 & ~2);
         System.out.println(~2 & 2);
         System.out.println(~4 & 4);
-        System.out.println((1<<31) +3);
+        System.out.println((1<<30)  + (1<<30)-1);
+        System.out.println(0x7fffffff);
+        System.out.println((1<<31) );
+        System.out.println(-1 << 29 | 121);
+        System.out.println(-1 << 28 | 121);
+        System.out.println(-1 << 30 | 121);
+        System.out.println();
         HashMap hashMap;
     }
     @Test

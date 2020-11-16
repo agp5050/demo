@@ -1,6 +1,8 @@
 package com.agp.demo;
 
-public class Person {
+import java.io.Serializable;
+
+public class Person implements Serializable {
     public volatile int id;
     private String name;
     private Integer age;

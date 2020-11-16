@@ -25,7 +25,8 @@ public class SimpleNettyServer {
 
     public void bind(int port) throws Exception {
 
-        // 服务器端应用程序使用两个NioEventLoopGroup创建两个EventLoop的组，EventLoop这个相当于一个处理线程，是Netty接收请求和处理IO请求的线程。
+        // 服务器端应用程序使用两个NioEventLoopGroup创建两个EventLoop的组，
+        // EventLoop这个相当于一个处理线程，是Netty接收请求和处理IO请求的线程。
         // 主线程组, 用于接受客户端的连接，但是不做任何处理，跟老板一样，不做事
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         // 从线程组, 当boss接受连接并注册被接受的连接到worker时，处理被接受连接的流量。

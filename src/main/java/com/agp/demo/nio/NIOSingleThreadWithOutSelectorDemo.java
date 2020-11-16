@@ -8,6 +8,7 @@ import java.nio.channels.SocketChannel;
 import java.util.LinkedList;
 
 /**
+ * non-blocking IO， kernel支持
  * With no selectors（未添加多路复用器）, 这个程序，没有移除不用的socket，而且每次不管socket是否发来数据都在轮询。
  *
  * 如果10万个socket。 while里面轮询10万次。里面可能当前时刻也就1%100的有数据，这样轮询太慢。
@@ -17,7 +18,7 @@ import java.util.LinkedList;
  *
  *
  */
-public class NIODemo {
+public class NIOSingleThreadWithOutSelectorDemo {
     public static void main(String[] args) throws IOException, InterruptedException {
         LinkedList<SocketChannel> clients=new LinkedList<>();
         ServerSocketChannel server = ServerSocketChannel.open();
