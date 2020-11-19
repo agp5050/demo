@@ -4,7 +4,6 @@ import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
-import io.netty.channel.epoll.EpollSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -28,9 +27,9 @@ public class SimpleNettyServer {
         // 服务器端应用程序使用两个NioEventLoopGroup创建两个EventLoop的组，
         // EventLoop这个相当于一个处理线程，是Netty接收请求和处理IO请求的线程。
         // 主线程组, 用于接受客户端的连接，但是不做任何处理，跟老板一样，不做事
-        EventLoopGroup bossGroup = new NioEventLoopGroup();
+        EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         // 从线程组, 当boss接受连接并注册被接受的连接到worker时，处理被接受连接的流量。
-        EventLoopGroup workerGroup = new NioEventLoopGroup();
+        EventLoopGroup workerGroup = new NioEventLoopGroup(1);
 
         try {
             // netty服务器启动类的创建, 辅助工具类，用于服务器通道的一系列配置
@@ -41,7 +40,8 @@ public class SimpleNettyServer {
              * public ServerBootstrap group(EventLoopGroup group)
              * public ServerBootstrap group(EventLoopGroup parentGroup, EventLoopGroup childGroup)
              */
-            serverBootstrap.group(bossGroup, workerGroup)           //绑定两个线程组
+            //serverBootstrap.group(bossGroup, bossGroup) 单线程模型
+            serverBootstrap.group(bossGroup, bossGroup)           //绑定两个线程组 boss-worker线程模型
                     // 用于构造socketchannel工厂
                     .channel(NioServerSocketChannel.class)   //指定NIO的模式
                     /**
