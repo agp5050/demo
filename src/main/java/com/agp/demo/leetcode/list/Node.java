@@ -13,7 +13,7 @@ public class Node<T extends Comparable<T>> {
         StringBuilder sb=new StringBuilder("Node:"+this.value);
         Node next=this.next;
         while (next!=null){
-            sb.append(next.value);
+            sb.append("->"+next.value);
             next=next.next;
         }
         return sb.toString();
