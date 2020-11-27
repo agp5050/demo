@@ -78,8 +78,14 @@ public class TestInner {
             }
         }
     }
-
-
+    @Test
+    public void testEqual(){
+      String a=null;
+      String b=a;
+      a="xxx";
+        System.out.println(a);
+        System.out.println(b);
+    }
 
 
 }

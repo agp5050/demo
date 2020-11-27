@@ -1,11 +1,29 @@
 package com.agp.demo.leetcode.list;
 
+import java.util.Arrays;
+
 public class Node<T extends Comparable<T>> {
     public Node next;
     public T value;
     public Node(){}
     public Node(T value){
         this.value=value;
+    }
+    public Node(T ... values){
+        Arrays.sort(values);
+        Node n,b=null;
+        for (T v:values){
+            if (value ==null){
+                value=v;
+                n=next;
+                b=this;
+            }else {
+                n=new Node(v);
+                b.next=n;
+                b=n;
+                n=n.next;
+            }
+        }
     }
 
     @Override
