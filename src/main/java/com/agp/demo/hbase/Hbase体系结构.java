@@ -57,6 +57,12 @@ package com.agp.demo.hbase;
  *      由物理上相邻的多个KV数据组成
  *      BlockCache主要有两种实现——LRUBlockCache和BucketCache
  *
+ *Table                    (HBase table)
+ *     Region               (Regions for the table)
+ *         Store            (Store per ColumnFamily for each Region for the table)
+ *             MemStore     (MemStore for each Store for each Region for the table)
+ *             StoreFile    (StoreFiles for each Store for each Region for the table)
+ *                 Block    (Blocks within a StoreFile within a Store for each Region for the table)
  *
  *
  *
