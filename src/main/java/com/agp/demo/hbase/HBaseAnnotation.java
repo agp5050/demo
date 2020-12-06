@@ -5,10 +5,10 @@ import java.util.HashMap;
 /**
  * 1. 分布式架构，多个regionServer 分布式管理数据，分布式执行各个nosql数据操作
  * 2.分布式数据存储、自动数据分片     （存储到各个region上面，region达到一定程度会分裂成两个）
- * 3. 集成hdfs 作为分布式文件存储系统
- * 4.强一致读写 ，写成功立马可以读
- * 5. 高可用，任何一个regionserver挂掉也仍然可以读，也不会导致数据丢失，其他服务器可以接管他的工作
- * 6.  支持map reduce、spark计算引擎 抽取和存储数据
+ * 3.集成hdfs 作为分布式文件存储系统
+ * 4.强一致读写,写成功立马可以读
+ * 5.高可用，任何一个regionserver挂掉也仍然可以读，也不会导致数据丢失，其他服务器可以接管他的工作
+ * 6.支持map reduce、spark计算引擎 抽取和存储数据
  * 7.支持web界面对hbase集群进行运维和管理
  */
 /*
@@ -31,7 +31,7 @@ public class HBaseAnnotation {
     /*列所有表 list*  describe abc 详细信息/
     /*插入命令put 'student','1001', 'info:sex', male'    1001 rowKey  */
     /*常用命令 scan 'abc'*/
-    /*Cell -> {rowkey ,column family:column,version}  version 使用timestamp作为区分*/
+    /*Cell -> {rowkey ,column family:column,type,version}  version 使用timestamp作为区分*/
     /*Namespace 类似于DB，表所在DB    --》 list_namespace ,  create_namespace 'agp' */
     /*指定命名空间建表  create 'agp:test','info'*/
 
@@ -57,8 +57,10 @@ public class HBaseAnnotation {
     /*FilterList */
 
 
-    /**Hbase没有索引概念，但是可以模拟索引，进行查询优化 可以新建一个abc_index表，里面比如经常查询的userName为rowkey
-     * abc表插入同名的rowkey时，这个abc_index ,在f列族里面添加一个column=rowkey的列，这样查询时，查询abc_index获取所有的
+    /**Hbase没有索引概念，但是可以模拟索引，进行查询优化 可以新建一个abc_index表，
+     * 里面比如经常查询的userName为rowkey
+     * abc表插入同名的rowkey时，这个abc_index ,
+     * 在f列族里面添加一个column=rowkey的列，这样查询时，查询abc_index获取所有的
      * column，然后根据column查询所有对应的abc里面的row。*/
 
 

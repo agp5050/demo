@@ -11,7 +11,7 @@ public class BinarySearch<T extends Comparable<T>> {
             int middle=(start+end)/2;
             T guess=ary[middle];//中间值
             if (guess.compareTo(target)==0) return guess;
-            if (guess.compareTo(target)>0) { //中间值大于目标值
+            else if (guess.compareTo(target)>0) { //中间值大于目标值
                 end=middle-1;
             }else {  //中间值小于target
                 start=middle+1;
