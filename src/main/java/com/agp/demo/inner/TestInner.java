@@ -86,6 +86,17 @@ public class TestInner {
         System.out.println(a);
         System.out.println(b);
     }
-
+    @Test
+    public void testGetHourFromTimestamp(){
+            long cu = System.currentTimeMillis();
+            long DAY_MILLIS=24 * 60 * 60 * 1000L;
+            long HOUR_MILLIS=60*60*1000L;
+            long MINUTE_MILLIS=60*1000L;
+            long extraMillisInDay = cu % (DAY_MILLIS);
+            long hour = extraMillisInDay / (HOUR_MILLIS);
+            long extraMillisInHour = extraMillisInDay % (HOUR_MILLIS);
+            long minute = extraMillisInHour/MINUTE_MILLIS;
+            System.out.println("cur Hour:"+hour+" cur minute: "+minute);
+        }
 
 }
