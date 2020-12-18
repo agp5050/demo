@@ -62,4 +62,79 @@ public class KafkaAnnotation {
  *       acks: all
  *
  * */
+
+/*enable.idempotence：true启用幂等性,服务器启用不影响已经运行的程序！！！*/
+/** From Kafka 0.11, the KafkaProducer supports two additional modes:
+ * the idempotent producer and the transactional producer.  幂等和事务
+ * The idempotent producer strengthens Kafka's delivery semantics from
+ * at least once to exactly once delivery.
+ * In particular producer retries will no longer introduce duplicates.  //producer重复发送不会再导致重复
+ *
+ * The transactional producer allows an application to send messages
+ * to multiple partitions (and topics!) atomically.  事务发送保证发送到多个分区，原子性！
+ *
+ *
+ * To enable idempotence, the enable.idempotence  configuration must be set to true
+ *
+ *If set, the retries config will be defaulted to Integer.MAX_VALUE
+ *
+ * the  max.in.flight.requests.per.connection
+ *config will be defaulted to  1
+ *and  ack config will be defaulted to all
+ * There are no API changes for the idempotent
+ *producer, so existing applications will not need to be modified to take advantage of this feature.
+ *
+ * To take advantage of the idempotent producer,
+ * it is imperative to avoid application level re-sends since these cannot
+ *be de-duplicated.  As such, if an application enables idempotence, it is recommended to leave the
+ *retries config unset,
+ * //幂等性的启用，只能确保在单个session中。 如果重启服务，不同session直接的幂等性不能保证。所以producer端还好启用事务。
+ * the producer can only guarantee idempotence for messages sent within a single session
+ *
+ *transactional.id 事务，producer端必须指定
+ *To use the transactional producer and the attendant APIs, you must set the
+ *transactional.id configuration property.
+ *
+ * If the transactional.id is set, idempotence is automatically enabled along with
+ * the producer configs which idempotence depends on
+ *Further, topics which are included in transactions should be configured for durability.
+ *In particular, the replication.factor should be at least 3
+ * and the min.insync.replicas for these topics should be set to 2.
+ *
+ *Finally, in order for transactional guarantees
+ *to be realized from end-to-end, the consumers must be configured to read only
+ *committed messages as well.  消费端必须配置只读已提交消息
+ *
+ * The purpose of the transactional.id is to enable transaction recovery across multiple sessions of a
+ *single producer instance.
+ *
+ *
+ * */
+
+/*
+* 0.11kafka producer端事务代码：
+** Properties props = new Properties();
+ * props.put("bootstrap.servers", "localhost:9092");
+ * props.put("transactional.id", "my-transactional-id");
+ * Producer<String, String> producer = new KafkaProducer<>(props, new StringSerializer(), new StringSerializer());
+ *
+ * producer.initTransactions();
+ *
+ * try {
+ *     producer.beginTransaction();
+ *     for (int i = 0; i < 100; i++)
+ *         producer.send(new ProducerRecord<>("my-topic", Integer.toString(i), Integer.toString(i)));
+ *     producer.commitTransaction();
+ * } catch (ProducerFencedException | OutOfOrderSequenceException | AuthorizationException e) {
+ *     // We can't recover from these exceptions, so our only option is to close the producer and exit.
+ *     producer.close();
+ * } catch (KafkaException e) {
+ *     // For all other exceptions, just abort the transaction and try again.
+ *     producer.abortTransaction();
+ * }
+ * producer.close();
+ * }
+ *
+ * */
+
 }

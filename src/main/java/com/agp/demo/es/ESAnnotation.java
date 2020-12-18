@@ -11,6 +11,25 @@ package com.agp.demo.es;
  *
  *
  */
+
+/*启动问题
+max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]
+sysctl -w vm.max_map_count=262144 临时修改
+为了让sysctl所操作的参数永久有效，
+需要修改/etc/sysctl.conf(CentOS5 6) 或者 /etc/sysctl.d/*.conf(CentOS7）的配置文件
+vm.max_map_count=262144
+sysctl -p 生效
+ */
+/*
+max number of threads [3818] for user [es] is too low, increase to at least [4096]
+
+*  soft nproc  4096
+*  hard nproc  4096
+
+
+
+
+*/
 public class ESAnnotation {
     /*写数据：
     * 1客户端选择一个Node1发送写请求， Node1作为 Coordinating Node
