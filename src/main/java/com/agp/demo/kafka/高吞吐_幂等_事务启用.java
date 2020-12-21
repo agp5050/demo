@@ -10,7 +10,7 @@ package com.agp.demo.kafka;
  * 6. 批量压缩，降低磁盘IO消耗 gzip
  * 7.批量读写 不是单条读写
  */
-public class KafkaAnnotation {
+public class 高吞吐_幂等_事务启用 {
     /*幂等性消费端控制： 消费时，加入到内存set中，中断后，再次消费查看set中是否已存在*/
     /*生产端，retry发送。  brokers ACK设置为-1 所有的副本都收到后再进行发送。*/
 

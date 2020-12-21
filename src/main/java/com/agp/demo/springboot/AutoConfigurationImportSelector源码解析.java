@@ -1,5 +1,9 @@
 package com.agp.demo.springboot;
 
+import org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration;
+import org.springframework.boot.autoconfigure.aop.AopAutoConfiguration;
+import org.springframework.boot.autoconfigure.data.cassandra.CassandraDataAutoConfiguration;
+
 /**
  * @EnableAutoConfiguration的关键功能是通过@Import注解导入的ImportSelector来完成的
  *
@@ -48,9 +52,9 @@ package com.agp.demo.springboot;
  *通过Spring Core提供的SpringFactoriesLoader类可以读取spring.factories文件中注册的类
  *
  * classLoader.getResources("META-INF/spring.factories"):Enumeration<URL>
- *if classLoader ==null ==> ClassLoader.getSystemResources("")
+ *if classLoader ==null ==> ClassLoader.getSystemResources("META-INF/spring.factories")
  *
- * SpringFactoriesLoader加载器加载指定ClassLoader下面的所有META-INF/spring.factories文件，
+ * SpringFactoriesLoader加载器加载指定ClassLoader下面的 所有META-INF/spring.factories文件，
  * 并将文件解析内容存于Map<String,List<String>>内。
  * 然后，通过loadFactoryNames传递过来的class的名称从Map中获得该类的配置列表
  *
@@ -64,11 +68,61 @@ package com.agp.demo.springboot;
      * OnWebApplicationCondition，
  * 它们均实现了AutoConfigurationImportFilter接口。
  *
+ *AutoConfigurationImportFilter
+ * # Auto Configuration Import Filters    ===》 AutoConfigurationImportFilter
+ * org.springframework.boot.autoconfigure.AutoConfigurationImportFilter=\
+ * org.springframework.boot.autoconfigure.condition.OnBeanCondition,\
+ * org.springframework.boot.autoconfigure.condition.OnClassCondition,\
+ * org.springframework.boot.autoconfigure.condition.OnWebApplicationCondition
  *
+ * 			for (AutoConfigurationImportFilter filter : this.filters) {
+ * 				boolean[] match = filter.match(candidates, this.autoConfigurationMetadata);
+ * 				for (int i = 0; i < match.length; i++) {
+ * 					if (!match[i]) {
+ * 						candidates[i] = null;
+ * 						skipped = true;
+ *                                        }                *            }
+ * 			}
+ *
+ *
+双循环对3个Condition注解都包涵的，配置类才是有效的
+对自动配置组件列表进行再次过滤，
+过滤条件为该列表中自动配置类的注解得包含在OnBeanCondition、OnClassCondition和OnWebApplicationCondition中指定的注解，
+依次包含@ConditionalOnBean、@ConditionalOnClass和@ConditionalOnWebApplication。
+
+
+在完成了以上步骤的过滤、筛选之后，
+我们最终获得了要进行自动配置的类的集合，在将该集合返回之前，
+在AutoConfigurationImportSelector类中完成的最后一步操作就是相关事件的封装和广播，相关代码如下。
+
+将筛选出的自动配置类集合和被排除的自动配置类集合封装成AutoConfigurationImportEvent事件对象，
+并传入该事件对象通过监听器提供的onAutoConfigurationImportEvent方法，最后进行事件广播。
+
+List<AutoConfigurationImportListener> listeners = getAutoConfigurationImportListeners();
+if (!listeners.isEmpty()) {
+AutoConfigurationImportEvent event = new AutoConfigurationImportEvent(this, configurations, exclusions);
+for (AutoConfigurationImportListener listener : listeners) {
+invokeAwareMethods(listener);
+listener.onAutoConfigurationImportEvent(event);
+}
+}
+
+
+
  *
  *
  *
  *
  */
+
 public class AutoConfigurationImportSelector源码解析 {
+
+    SpringApplicationAdminJmxAutoConfiguration t;
+    AopAutoConfiguration a;
+    CassandraDataAutoConfiguration c;
+
+    public static void main(String[] args) {
+
+
+    }
 }
