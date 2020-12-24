@@ -68,7 +68,8 @@ public class 高吞吐_幂等_事务启用 {
  * the idempotent producer and the transactional producer.  幂等和事务
  * The idempotent producer strengthens Kafka's delivery semantics from
  * at least once to exactly once delivery.
- * In particular producer retries will no longer introduce duplicates.  //producer重复发送不会再导致重复
+ * In particular producer retries will no longer introduce duplicates.
+ * //producer重复发送不会再导致重复
  *
  * The transactional producer allows an application to send messages
  * to multiple partitions (and topics!) atomically.  事务发送保证发送到多个分区，原子性！
