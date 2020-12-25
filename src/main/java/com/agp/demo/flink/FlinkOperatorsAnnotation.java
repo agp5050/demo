@@ -40,6 +40,47 @@ package com.agp.demo.flink;
  *writeAsCsv(String filePath)
  *print
  *
+ * 常用命令：
+ * standLone模式：
+     * ./flink run -c aaa.bbb.cc.MainClass -p 2  /abc/ddd/jarpath --host hostname --port 7777
+     *
+     * ./flink cancel jobID
+     * ./flink list 查看flink当前所有的job
+     * ./flink list -a 历史和当前
+     *
+     * webUI ，提交jar后，点击对应jar包，配置 mainClass parallelism host port
+ *
+ * Yarn模式：
+ *   session-cluster:
+ *      特点：
+ *         首先向yarn 申请资源，申请完毕不会改变。之后用这个session提交的任务，必须等待前一个任务执行完毕
+ *         才能提交下一个任务。
+ *         适合规模小，执行时间短的作业
+ *
+ *      启动：
+ *          首先启动一个yarn-session：（相当于申请一个资源集群）
+ *          ./yarn-session.sh -n 2 -s 2 -jm 1024 -tm 1024 -nm test -d
+ *          -n:container(taskmanager的num，少用：可以动态添加）
+ *          -s:slot（每个tm slot的数量）
+ *          -jm:jobmanager
+ *          -tm:taskmanager
+ *          -d:后台执行
+ *
+ *          然后启动 /flink run -c aaa.bbb.cc.MainClass -p 2  /abc/ddd/jarpath --host hostname --port 7777
+ *
+ *          yarn-application kill jobId
+ *
+ *   per-job-cluster:
+ *      每一个job都会单独向yarn申请资源，不受之前的job影响。
+ *      适合规模大，时间长的作业。
+ *
+ *      启动：
+ *          ./flink run -m yarn-cluster -c a...Main  ../.../abc.jar --host hostname --port 7777
+ *
+ *          -m: mode
+ *
+ *
+ *
  */
 
 public class FlinkOperatorsAnnotation {
